@@ -1,0 +1,88 @@
+create table Funcionarios(
+id number(12) not null,
+nome VARCHAR2(45) not null,
+sobrenome VARCHAR2(45) not null,
+salario number(8,2) not null,
+cpf VARCHAR2(14) not null unique,
+matricula VARCHAR2(45) not null unique,
+departamento_id number(12) not null
+);
+
+create table Funcionarios_Ordem(
+id number(12) not null,
+funcionario_id number(12) not null,
+ordem_servico_id number(12) not null
+);
+
+create table Departamentos(
+id number(12) not null,
+departamento_nome VARCHAR2(45) not null unique
+
+);
+
+create table Servicos(
+id number(12) not null,
+servico_nome VARCHAR2(45) not null unique,
+valor number(8,2) not null
+);
+
+create table Produtos(
+id number(12) not null,
+marca VARCHAR2(45) not null,
+modelo VARCHAR2(45) not null,
+quantidade number(6) not null,
+valor number(8,2) not null
+);
+
+create table Clientes(
+id number(12) not null,
+cpf VARCHAR2(45) not null unique,
+telefone VARCHAR2(45) not null unique,
+nome VARCHAR2(45) not null,
+sobrenome VARCHAR2(45) not null
+
+);
+
+create table Enderecos(
+id number(12) not null,
+rua VARCHAR2(45) not null,
+bairro VARCHAR2(45) not null,
+cep VARCHAR2(45) not null,
+numero VARCHAR2(45) not null,
+desc_endereco VARCHAR2(45) not null,
+cliente_id number(12) not null
+);
+
+create table Ordens_Servico(
+id number(12) not null,
+cliente_id number(12) not null,
+servico_id number(12) not null,
+data_realizacao date not null,
+desc_ordem VARCHAR2(45) not null
+
+);
+
+create table Produtos_Liberados(
+id number(12) not null,
+produto_id number(12) not null,
+ordens_servico_id number(12) not null,
+data_liberacao date not null
+);
+
+Alter Table FUNCIONARIOS add constraint pk_funcionario primary key(id);
+Alter Table Clientes add constraint pk_clientes primary key(id);
+Alter Table Enderecos add constraint pk_enderecos primary key(id);
+Alter Table Produtos add constraint pk_produtos primary key(id);
+Alter Table Departamentos add constraint pk_departamentos primary key(id);
+Alter Table Servicos add constraint pk_servicos primary key(id);
+Alter Table Ordens_Servico add constraint pk_ordens_servico primary key(id);
+Alter Table Produtos_Liberados add constraint pk_produtos_liberados primary key(id);
+Alter Table Funcionarios_Ordem add constraint pk_funcionarios_ordem primary key(id);
+
+Alter Table Funcionarios add constraint fk_departamento_id foreign key(departamento_id) references Departamentos(id);
+Alter Table Ordens_Servico add constraint fk_cliente_id foreign key(cliente_id) references Clientes(id);
+Alter Table Ordens_Servico add constraint fk_servico_id foreign key(servico_id) references Servicos(id);
+Alter Table Produtos_Liberados add constraint fk_produto_id foreign key(produto_id) references produtos(id);
+Alter Table Produtos_Liberados add constraint fk_ordem_servico_id foreign key(ordens_servico_id) references Ordens_Servico(id);
+Alter Table Enderecos add constraint fk_endereco_cliente_id foreign key(cliente_id) references clientes(id);
+Alter Table Produtos add constraint uk_marca_modelo unique(marca, modelo);
